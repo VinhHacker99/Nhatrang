@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tài Xỉu Online - Demo</title>
-    <!-- Tải Tailwind CSS cho styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tải Tone.js cho âm thanh -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <!-- Cấu hình Tailwind cho màu sắc và font -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body {
@@ -71,7 +68,6 @@
 </head>
 <body class="p-4 sm:p-8 flex flex-col items-center justify-center">
 
-    <!-- OVERLAY ĐỂ KHỞI ĐỘNG ÂM THANH (BẮT BUỘC TRÊN BROWSER) -->
     <div id="audio-overlay" class="fixed inset-0 bg-black/80 z-[100] flex flex-col items-center justify-center text-white">
         <p class="text-xl mb-4 text-yellow-300">Nhấn để bắt đầu trò chơi (và kích hoạt âm thanh)</p>
         <button id="start-audio-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg gold-glow transition">BẮT ĐẦU TÀI XỈU</button>
@@ -81,7 +77,6 @@
 
     <div class="game-container w-full max-w-4xl p-6 md:p-10 rounded-2xl gold-glow">
         
-        <!-- TOP BAR & INFO -->
         <div class="flex justify-between items-center mb-6">
             <div class="text-white text-lg font-bold">
                 Số dư: <span id="balance" class="text-yellow-400">10,000,000</span> đ
@@ -89,10 +84,8 @@
             <div class="text-white text-sm">Vòng #<span id="session-id">1001</span></div>
         </div>
 
-        <!-- BETTING AREA -->
         <div class="flex justify-between items-stretch gap-4 md:gap-8">
             
-            <!-- TÀI BOX -->
             <div id="tai-box" data-bet-side="tai" class="bet-box-gradient rounded-xl p-4 flex-1 flex flex-col items-center cursor-pointer transform hover:scale-[1.02] transition">
                 <h2 class="text-4xl md:text-5xl font-black text-yellow-300 drop-shadow-lg">TÀI</h2>
                 <div class="text-white text-base md:text-lg my-2">Tổng cược: <span id="tai-total-bet">0</span> đ</div>
@@ -100,14 +93,11 @@
                 <button onclick="placeBet('tai')" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg shadow-xl uppercase transition">Đặt Cược</button>
             </div>
 
-            <!-- DICE & TIMER AREA -->
             <div class="w-full max-w-[200px] flex flex-col items-center justify-between">
-                <!-- TIMER -->
                 <div id="timer" class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-full flex items-center justify-center text-red-600 font-black text-3xl md:text-4xl border-4 border-yellow-400 gold-glow shadow-inner">
                     30
                 </div>
 
-                <!-- DICE DISPLAY -->
                 <div id="dice-display" class="dice-display flex justify-center gap-2 md:gap-3 my-4">
                     <div id="d1" class="dice w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-white text-xl md:text-2xl font-bold shadow-2xl">?</div>
                     <div id="d2" class="dice w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-white text-xl md:text-2xl font-bold shadow-2xl">?</div>
@@ -117,7 +107,6 @@
                 <div id="result-text" class="text-2xl font-bold text-white mt-2">Đang chờ...</div>
             </div>
 
-            <!-- XỈU BOX -->
             <div id="xiu-box" data-bet-side="xiu" class="bet-box-gradient rounded-xl p-4 flex-1 flex flex-col items-center cursor-pointer transform hover:scale-[1.02] transition">
                 <h2 class="text-4xl md:text-5xl font-black text-yellow-300 drop-shadow-lg">XỈU</h2>
                 <div class="text-white text-base md:text-lg my-2">Tổng cược: <span id="xiu-total-bet">0</span> đ</div>
@@ -127,7 +116,6 @@
 
         </div>
 
-        <!-- CHIP QUICK BET BAR -->
         <div class="quick-bet-bar flex justify-center flex-wrap gap-3 p-4 bg-black/50 rounded-xl mt-6">
             <div id="selected-chip" class="text-white text-lg font-bold p-2 rounded-lg border-2 border-yellow-500 bg-yellow-900/50">Chip: 10K</div>
             <button onclick="selectChip(10000)" class="chip-btn bg-gray-700 text-yellow-400 font-bold py-3 px-5 rounded-full shadow-lg hover:ring-4 ring-yellow-500 transition">10K</button>
@@ -137,15 +125,12 @@
             <button onclick="clearBet()" class="chip-btn bg-red-700 text-white font-bold py-3 px-5 rounded-full shadow-lg hover:ring-4 ring-white transition">Hủy Cược</button>
         </div>
 
-        <!-- HISTORY CHART / ROAD MAP -->
         <div class="mt-8 p-4 bg-black/50 rounded-xl">
             <h3 class="text-xl font-bold text-yellow-400 mb-3 text-center">Lịch Sử Ván Chơi (Road Map & Tỉ Lệ)</h3>
             <div id="history-road-map" class="flex flex-wrap gap-2 justify-center min-h-[40px] border-b border-gray-600 pb-2 mb-2">
-                <!-- History elements will be rendered here -->
-            </div>
+                </div>
             <div id="history-summary" class="text-white text-sm text-center flex justify-around">
-                <!-- Summary will be rendered here -->
-            </div>
+                </div>
         </div>
 
     </div>
@@ -170,22 +155,32 @@
             document.getElementById('d3')
         ];
 
-        // --- TONE.JS AUDIO SETUP ---
+        // --- TONE.JS AUDIO SETUP (ĐÃ CẬP NHẬT) ---
         let ambientTrack = null;
-        const betSynth = new Tone.MembraneSynth({
-            pitchDecay: 0.05,
-            octaves: 8,
-            envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 0.8 },
-            volume: -10
+        let shakerNoise = null; // Biến mới cho âm thanh lắc xúc xắc
+
+        // Synth cho cược (giữ nguyên, giảm volume)
+        const betSynth = new Tone.MembraneSynth({ 
+            pitchDecay: 0.05, octaves: 8, volume: -15, 
+            envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 0.8 } 
         }).toDestination();
         
-        const revealSynth = new Tone.FMSynth({
-            volume: -5,
-            modulationIndex: 10,
-            oscillator: { type: "sine" },
+        // Synth cho công bố (giữ nguyên, giảm volume)
+        const revealSynth = new Tone.FMSynth({ 
+            volume: -8, 
+            modulationIndex: 10, oscillator: { type: "sine" },
             envelope: { attack: 0.01, decay: 0.6, sustain: 0.1, release: 1 },
             modulation: { type: "square" }
         }).toDestination();
+
+        // Bộ tổng hợp cho tiếng lắc xúc xắc (Shaker Noise - mô phỏng bằng Noise Synth)
+        shakerNoise = new Tone.NoiseSynth({
+            volume: -20, // Âm lượng nhỏ
+            noise: { type: "pink" }, // Tiếng ồn hồng
+            envelope: { attack: 0.005, decay: 0.1, sustain: 0.05, release: 0.1 }
+        }).toDestination();
+        
+        let shakerLoop = null; // Biến để lưu trữ Loop
 
         // Khởi động Audio Context khi người dùng tương tác
         const startAudioContext = async () => {
@@ -193,14 +188,25 @@
                 await Tone.start();
             }
 
-            // Simple ambient sound (low bass drone)
+            // 1. Nhạc nền (Sử dụng LFO để tạo hiệu ứng "sống" hơn)
             if (!ambientTrack) {
+                // Mô phỏng Bass Drone/Nhạc nền đơn giản
                 ambientTrack = new Tone.Oscillator(40, "sine").toDestination();
-                ambientTrack.volume.value = -25; // Âm lượng nhỏ
+                ambientTrack.volume.value = -30; // Âm lượng rất nhỏ
+                
+                // Thêm LFO để điều chế âm lượng, tạo cảm giác nhịp điệu (Ambient Vibe)
+                const lfo = new Tone.LFO(0.5, -35, -30).connect(ambientTrack.volume);
+                lfo.start();
+                
                 ambientTrack.start();
             }
 
             document.getElementById('audio-overlay').classList.add('hidden');
+            // Bắt đầu vòng chơi chỉ khi audio được kích hoạt
+            updateUI(); 
+            renderHistoryChart();
+            startNewRound();
+            selectChip(10000); 
         };
 
         document.getElementById('start-audio-btn').addEventListener('click', startAudioContext);
@@ -213,10 +219,37 @@
 
         const playRevealSound = () => {
              if (Tone.context.state === 'running') {
-                revealSynth.triggerAttackRelease("G4", "4n");
-                revealSynth.triggerAttackRelease("C5", "4n", "+0.2");
+                 revealSynth.triggerAttackRelease("G4", "4n");
+                 revealSynth.triggerAttackRelease("C5", "4n", "+0.2");
             }
         };
+
+        // Hàm phát âm thanh lắc xúc xắc (MỚI)
+        const playShakeSound = () => {
+            if (Tone.context.state === 'running') {
+                // Đảm bảo không có loop cũ đang chạy
+                if (shakerLoop) {
+                    shakerLoop.dispose();
+                }
+                
+                // Tạo loop mới để lặp lại tiếng shaker noise nhanh trong 3 giây
+                shakerLoop = new Tone.Loop(() => {
+                    shakerNoise.triggerAttackRelease("32n"); // Âm thanh ngắn, nhanh
+                }, "16n").start(0);
+                
+                // Dừng loop sau 3 giây
+                Tone.Transport.scheduleOnce(() => {
+                    if (shakerLoop) {
+                         shakerLoop.dispose();
+                         shakerLoop = null;
+                    }
+                }, "+3.0"); // Dừng sau 3 giây
+                
+                // Cần phải start Tone.Transport để Loop chạy
+                Tone.Transport.start(); 
+            }
+        };
+
         // --- END TONE.JS SETUP ---
 
         // --- HÀM HỖ TRỢ HIỂN THỊ ---
@@ -359,10 +392,13 @@
             showMessage("Đã hủy tất cả tiền cược.", 'info');
         };
 
-        // 4. LẮC XÚC XẮC (Hiệu ứng quay 3D)
+        // 4. LẮC XÚC XẮC (Hiệu ứng quay 3D) (ĐÃ CẬP NHẬT)
         const startShaking = () => {
             document.getElementById('result-text').textContent = "ĐANG LẮC...";
             
+            // Bắt đầu phát âm thanh lắc xúc xắc (MỚI)
+            playShakeSound(); 
+
             // Bắt đầu quay ngẫu nhiên 3D liên tục
             shakeInterval = setInterval(() => {
                 diceElements.forEach(d => {
@@ -485,7 +521,7 @@
                 document.getElementById('timer').textContent = timeLeft;
 
                 if (timeLeft <= 5) {
-                     document.getElementById('timer').classList.add('text-red-800', 'animate-pulse');
+                    document.getElementById('timer').classList.add('text-red-800', 'animate-pulse');
                 } else {
                     document.getElementById('timer').classList.remove('text-red-800', 'animate-pulse');
                 }
@@ -499,13 +535,9 @@
         };
 
         // --- KHỞI CHẠY GAME ---
-        window.onload = () => {
-            updateUI();
-            renderHistoryChart(); // Vẽ biểu đồ ban đầu (trống)
-            startNewRound(); // Bắt đầu vòng chơi đầu tiên
-            selectChip(10000); // Thiết lập chip mặc định
-        };
-
+        // Đã xóa hàm window.onload cũ để chờ click nút START AUDIO
+        // window.onload = () được thay bằng hàm startAudioContext()
+        // Các lệnh khởi tạo game (updateUI, startNewRound, selectChip) đã được chuyển vào startAudioContext()
     </script>
 </body>
 </html>
