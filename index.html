@@ -1,132 +1,152 @@
-<!doctype html>
-<html lang="vi">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Random Xu Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Random Win/Lose Ultimate</title>
 <style>
-:root {
-  --bg:#0e0e10;
-  --panel:#1a1a1d;
-  --accent:#00e0b8;
-  --text:#f5f5f5;
-  --danger:#ff4f4f;
-}
-body {
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  text-align:center;
-  padding:40px;
-}
-h1 {
-  font-size:2rem;
-  margin-bottom:10px;
-  color:var(--accent);
-}
-.panel {
-  background:var(--panel);
-  padding:30px;
-  border-radius:10px;
-  display:inline-block;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
-  width:90%;
-  max-width:400px;
-}
-button {
-  background:var(--accent);
-  color:#fff;
-  border:none;
-  padding:12px 30px;
-  font-size:18px;
-  border-radius:8px;
-  cursor:pointer;
-  transition:0.2s;
-  margin:8px;
-}
-button:hover {
-  transform:scale(1.05);
-}
-button:disabled {
-  background:#555;
-  cursor:not-allowed;
-}
-#balance {
-  font-weight:bold;
-  margin:15px 0;
-  font-size:20px;
-}
-.spin-animation {
-  animation: spin 1s ease-in-out;
-}
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(180deg) scale(1.2); }
-  100% { transform: rotate(360deg); }
-}
-footer {
-  margin-top:30px;
-  font-size:12px;
-  opacity:0.7;
-}
+body { font-family: Arial; text-align: center; padding: 50px; background-color: #f0f8ff; position: relative; overflow: hidden;}
+button { font-size: 20px; padding: 10px 20px; margin: 10px; cursor: pointer; }
+#balance, #highscore { font-size: 24px; margin-top: 20px; }
+#result img { width: 150px; margin-top: 20px; transition: transform 0.3s; }
+.win { animation: jump 0.5s; }
+.lose { animation: shake 0.5s; }
+
+@keyframes jump { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
+@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+
+.particle { position: absolute; width: 10px; height: 10px; background: gold; border-radius: 50%; pointer-events: none; animation: particleAnim 1s forwards; }
+@keyframes particleAnim { 0% { transform: translateY(0) scale(1); opacity: 1;} 100% { transform: translateY(-100px) scale(0); opacity: 0;} }
+
+#owner { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #fffa8d; padding: 10px 20px; border-radius: 10px; font-size: 24px; display: none; box-shadow: 0 0 10px #ffd700; }
+
+#jarExplosion { position: absolute; width: 100px; height: 100px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: url('https://i.imgur.com/HnX6p7N.png') no-repeat center/contain; display: none; }
+
+.coin { position: absolute; width: 25px; height: 25px; background: url('https://i.imgur.com/W7Uo1qv.png') no-repeat center/contain; pointer-events: none; animation: fall 2s linear forwards; }
+@keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(500px) rotate(720deg); opacity: 0; } }
+
+#jackpot { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: #ff0; text-shadow: 0 0 20px red; display: none; }
+
+.confetti { position: absolute; width: 10px; height: 10px; background: red; opacity: 0.8; pointer-events: none; animation: confettiFall 3s linear forwards; }
+@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg);} 100% { transform: translateY(600px) rotate(720deg); opacity: 0;} }
 </style>
 </head>
 <body>
-<h1>🎰 Random Xu Demo</h1>
-<div class="panel">
-  <p>Nhấn "Quay" để nhận xu ngẫu nhiên! (trò chơi giả lập, không tiền thật)</p>
-  <div style="margin:20px;">
-    <img id="coin" src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Gold_coin_icon.png" width="100">
-  </div>
-  <button id="spin">🎲 Quay</button>
-  <button id="withdraw">💸 Rút xu (giả)</button>
-  <div id="result"></div>
-  <div id="balance">Số dư: 0 xu</div>
-</div>
 
-<footer>© 2025 Demo Random Game - Chỉ dành cho học tập & giải trí</footer>
+<h1>Game Random Win/Lose Ultimate</h1>
+
+<div id="owner">Chủ: vinhdzz</div>
+
+<label>Chọn mức cược: </label>
+<select id="betSelect">
+  <option value="10">10</option>
+  <option value="20">20</option>
+  <option value="50">50</option>
+</select>
+<br>
+<button onclick="play()">Chơi</button>
+<div id="result"></div>
+<div id="balance">Tiền của bạn: 100</div>
+<div id="highscore">Tiền cao nhất: 100</div>
+
+<div id="jarExplosion"></div>
+<div id="jackpot">JACKPOT!</div>
+
+<audio id="winSound" src="https://freesound.org/data/previews/341/341695_3248244-lq.mp3"></audio>
+<audio id="loseSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
+<audio id="jackpotSound" src="https://freesound.org/data/previews/331/331912_3248244-lq.mp3"></audio>
 
 <script>
-let balance = parseInt(localStorage.getItem('balance') || '0');
-const balanceEl = document.getElementById('balance');
-const resultEl = document.getElementById('result');
-const coinEl = document.getElementById('coin');
-const spinBtn = document.getElementById('spin');
-const withdrawBtn = document.getElementById('withdraw');
-const sound = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+let balance = 100;
+let highscore = 100;
+let streak = 0;
 
-function updateBalance() {
-  balanceEl.innerHTML = "Số dư: " + balance + " xu";
-  localStorage.setItem('balance', balance);
+const winImages = ['https://i.imgur.com/4AiXzf8.png','https://i.imgur.com/0y0y4jT.png','https://i.imgur.com/OZq9s6P.png','https://i.imgur.com/0jNmOBx.jpg']; // thêm ảnh sexy
+const loseImages = ['https://i.imgur.com/N7bQy8X.png','https://i.imgur.com/Clp2xHj.png','https://i.imgur.com/3gQf4eF.png','https://i.imgur.com/1b7tH7x.jpg']; // thêm ảnh sexy
+
+window.onload = () => {
+    let ownerDiv = document.getElementById('owner');
+    ownerDiv.style.display = 'block';
+    setTimeout(() => ownerDiv.style.display = 'none', 5000);
 }
 
-spinBtn.onclick = () => {
-  spinBtn.disabled = true;
-  resultEl.innerHTML = "🎡 Đang quay...";
-  coinEl.classList.add('spin-animation');
-  sound.play();
-  setTimeout(() => {
-    coinEl.classList.remove('spin-animation');
-    const reward = Math.floor(Math.random()*500 + 100);
-    balance += reward;
-    resultEl.innerHTML = "🎉 Bạn nhận được <b>" + reward + "</b> xu!";
-    updateBalance();
-    spinBtn.disabled = false;
-  }, 1500);
-};
+function createParticle(x, y){
+    let particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), 1000);
+}
 
-withdrawBtn.onclick = () => {
-  if(balance < 1000) {
-    alert("Bạn cần ít nhất 1000 xu mới có thể rút (giả thôi 😅)");
-  } else {
-    const fakeAmount = balance;
-    balance = 0;
-    updateBalance();
-    alert("✅ Đã 'rút' thành công " + fakeAmount + " xu (giả lập thôi nhé 😄)");
-  }
-};
+function jarExplosionEffect(){
+    let jar = document.getElementById('jarExplosion');
+    jar.style.display = 'block';
+    for(let i=0;i<50;i++) createParticle(window.innerWidth/2, window.innerHeight/2);
+    setTimeout(()=> jar.style.display='none',1500);
+}
 
-updateBalance();
+function coinsFall(count=20){
+    for(let i=0;i<count;i++){
+        let coin = document.createElement('div');
+        coin.className='coin';
+        coin.style.left = Math.random()*window.innerWidth+'px';
+        coin.style.top = '-50px';
+        document.body.appendChild(coin);
+        setTimeout(()=>coin.remove(),2000);
+    }
+}
+
+function confettiFall(count=50){
+    const colors = ['#ff0','#f00','#0f0','#0ff','#f0f','#fff'];
+    for(let i=0;i<count;i++){
+        let conf = document.createElement('div');
+        conf.className='confetti';
+        conf.style.left = Math.random()*window.innerWidth+'px';
+        conf.style.background = colors[Math.floor(Math.random()*colors.length)];
+        document.body.appendChild(conf);
+        setTimeout(()=>conf.remove(),3000);
+    }
+}
+
+function showJackpot(){
+    let jackpotDiv = document.getElementById('jackpot');
+    jackpotDiv.style.display='block';
+    document.getElementById('jackpotSound').play();
+    confettiFall(100);
+    setTimeout(()=>jackpotDiv.style.display='none',2000);
+}
+
+function play(){
+    let bet=parseInt(document.getElementById('betSelect').value);
+    let win=Math.random()<0.5;
+    let resultDiv=document.getElementById('result');
+
+    if(win){
+        balance+=bet;
+        streak++;
+        let img = winImages[Math.floor(Math.random()*winImages.length)];
+        resultDiv.innerHTML=`Bạn thắng! +${bet}<br><img src="${img}" class="win" alt="Win">`;
+        document.getElementById('winSound').play();
+        jarExplosionEffect();
+        coinsFall(20+streak*5);
+
+        if(streak>=3) showJackpot();
+
+    } else {
+        balance-=bet;
+        streak=0;
+        let img = loseImages[Math.floor(Math.random()*loseImages.length)];
+        resultDiv.innerHTML=`Bạn thua! -${bet}<br><img src="${img}" class="lose" alt="Lose">`;
+        document.getElementById('loseSound').play();
+    }
+
+    if(balance>highscore) highscore=balance;
+    document.getElementById('balance').innerText=`Tiền của bạn: ${balance}`;
+    document.getElementById('highscore').innerText=`Tiền cao nhất: ${highscore}`;
+}
 </script>
+
 </body>
 </html>
+
