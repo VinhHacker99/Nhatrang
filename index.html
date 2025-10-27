@@ -3,88 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Random Win/Lose Ultimate</title>
+<title>Siêu Slot VIP - vinhdzz</title>
 <style>
-body { font-family: Arial; text-align: center; padding: 50px; background-color: #f0f8ff; position: relative; overflow: hidden;}
-button { font-size: 20px; padding: 10px 20px; margin: 10px; cursor: pointer; }
-#balance, #highscore { font-size: 24px; margin-top: 20px; }
-#result img { width: 150px; margin-top: 20px; transition: transform 0.3s; }
-.win { animation: jump 0.5s; }
-.lose { animation: shake 0.5s; }
+body {
+  font-family: Arial;
+  text-align: center;
+  background: radial-gradient(circle at top,#111,#000);
+  color: #fff;
+  overflow: hidden;
+}
+h1 {
+  color: gold;
+  text-shadow: 0 0 15px #fff;
+}
+#owner {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fffa8d;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 24px;
+  box-shadow: 0 0 20px #ffd700;
+  z-index: 1000;
+  animation: blinkOwner 1s infinite alternate;
+}
+@keyframes blinkOwner { 0% {opacity:1;} 100% {opacity:0.5;} }
 
-@keyframes jump { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
-@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
-
-.particle { position: absolute; width: 10px; height: 10px; background: gold; border-radius: 50%; pointer-events: none; animation: particleAnim 1s forwards; }
-@keyframes particleAnim { 0% { transform: translateY(0) scale(1); opacity: 1;} 100% { transform: translateY(-100px) scale(0); opacity: 0;} }
-
-#owner { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #fffa8d; padding: 10px 20px; border-radius: 10px; font-size: 24px; display: none; box-shadow: 0 0 10px #ffd700; }
-
-#jarExplosion { position: absolute; width: 100px; height: 100px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: url('https://i.imgur.com/HnX6p7N.png') no-repeat center/contain; display: none; }
-
-.coin { position: absolute; width: 25px; height: 25px; background: url('https://i.imgur.com/W7Uo1qv.png') no-repeat center/contain; pointer-events: none; animation: fall 2s linear forwards; }
-@keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(500px) rotate(720deg); opacity: 0; } }
-
-#jackpot { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: #ff0; text-shadow: 0 0 20px red; display: none; }
-
-.confetti { position: absolute; width: 10px; height: 10px; background: red; opacity: 0.8; pointer-events: none; animation: confettiFall 3s linear forwards; }
-@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg);} 100% { transform: translateY(600px) rotate(720deg); opacity: 0;} }
+#slotMachine {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  position: relative;
+}
+.reel {
+  width: 100px;
+  height: 100px;
+  border: 4px solid gold;
+  margin: 0 10px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #000;
+  position: relative;
+  box-shadow: 0 0 15px #ffd700;
+}
+.symbol {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: top 0.1s;
+}
+button {
+  font-size: 20px;
+  padding: 10px 20px;
+  margin: 20px;
+  cursor: pointer;
+  background: gold;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 5px #000;
+}
+#balance, #highscore {
+  font-size: 24px;
+  margin-top: 20px;
+}
+#jackpot {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: #ff0;
+  text-shadow: 0 0 25px red;
+  display: none;
+  z-index: 1000;
+}
+.coin {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: url('https://i.imgur.com/W7Uo1qv.png') no-repeat center/contain;
+  pointer-events: none;
+  animation: fall 2s linear forwards;
+}
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity:1 }
+  100% { transform: translateY(500px) rotate(720deg); opacity:0 }
+}
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: red;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: confettiFall 3s linear forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg);}
+  100% { transform: translateY(600px) rotate(720deg); opacity:0;}
+}
+.winLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 4px solid yellow;
+  box-shadow: 0 0 25px yellow;
+  pointer-events: none;
+  animation: blink 0.5s linear infinite;
+}
+@keyframes blink { 0%,100% {opacity:1;} 50% {opacity:0;} }
+.flash {
+  box-shadow: 0 0 20px gold, 0 0 40px yellow inset;
+  animation: flash 0.3s infinite alternate;
+}
+@keyframes flash { 0% {box-shadow: 0 0 10px gold;} 100% {box-shadow: 0 0 25px yellow;}}
+.light {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: yellow;
+  box-shadow: 0 0 5px yellow;
+  animation: blinkLight 1s infinite alternate;
+}
+@keyframes blinkLight {
+  0% {opacity:0.2;}
+  100% {opacity:1;}
+}
 </style>
 </head>
 <body>
 
-<h1>Game Random Win/Lose Ultimate</h1>
-
+<h1>Siêu Slot VIP</h1>
 <div id="owner">Chủ: vinhdzz</div>
 
-<label>Chọn mức cược: </label>
-<select id="betSelect">
-  <option value="10">10</option>
-  <option value="20">20</option>
-  <option value="50">50</option>
-</select>
-<br>
-<button onclick="play()">Chơi</button>
-<div id="result"></div>
-<div id="balance">Tiền của bạn: 100</div>
-<div id="highscore">Tiền cao nhất: 100</div>
+<div id="slotMachine">
+  <div class="reel" id="reel1"></div>
+  <div class="reel" id="reel2"></div>
+  <div class="reel" id="reel3"></div>
+</div>
 
-<div id="jarExplosion"></div>
+<button onclick="spin()">Quay!</button>
+
+<div id="balance">Tiền: 100</div>
+<div id="highscore">Tiền cao nhất: 100</div>
 <div id="jackpot">JACKPOT!</div>
 
+<audio id="spinSound" src="https://freesound.org/data/previews/352/352661_3248244-lq.mp3"></audio>
 <audio id="winSound" src="https://freesound.org/data/previews/341/341695_3248244-lq.mp3"></audio>
-<audio id="loseSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
 <audio id="jackpotSound" src="https://freesound.org/data/previews/331/331912_3248244-lq.mp3"></audio>
+<audio id="bgSound" src="https://freesound.org/data/previews/316/316847_3248244-lq.mp3" loop autoplay></audio>
 
 <script>
 let balance = 100;
 let highscore = 100;
 let streak = 0;
 
-const winImages = ['https://i.imgur.com/4AiXzf8.png','https://i.imgur.com/0y0y4jT.png','https://i.imgur.com/OZq9s6P.png','https://i.imgur.com/0jNmOBx.jpg']; // thêm ảnh sexy
-const loseImages = ['https://i.imgur.com/N7bQy8X.png','https://i.imgur.com/Clp2xHj.png','https://i.imgur.com/3gQf4eF.png','https://i.imgur.com/1b7tH7x.jpg']; // thêm ảnh sexy
-
-window.onload = () => {
-    let ownerDiv = document.getElementById('owner');
-    ownerDiv.style.display = 'block';
-    setTimeout(() => ownerDiv.style.display = 'none', 5000);
-}
-
-function createParticle(x, y){
-    let particle = document.createElement('div');
-    particle.className = 'particle';
-    particle.style.left = x + 'px';
-    particle.style.top = y + 'px';
-    document.body.appendChild(particle);
-    setTimeout(() => particle.remove(), 1000);
-}
-
-function jarExplosionEffect(){
-    let jar = document.getElementById('jarExplosion');
-    jar.style.display = 'block';
-    for(let i=0;i<50;i++) createParticle(window.innerWidth/2, window.innerHeight/2);
-    setTimeout(()=> jar.style.display='none',1500);
-}
+const symbols = [
+'https://i.imgur.com/4AiXzf8.png', 
+'https://i.imgur.com/0y0y4jT.png',
+'https://i.imgur.com/OZq9s6P.png',
+'https://i.imgur.com/W7Uo1qv.png',
+'https://i.imgur.com/HnX6p7N.png'
+];
 
 function coinsFall(count=20){
     for(let i=0;i<count;i++){
@@ -98,51 +186,87 @@ function coinsFall(count=20){
 }
 
 function confettiFall(count=50){
-    const colors = ['#ff0','#f00','#0f0','#0ff','#f0f','#fff'];
+    const colors=['#ff0','#f00','#0f0','#0ff','#f0f','#fff'];
     for(let i=0;i<count;i++){
-        let conf = document.createElement('div');
+        let conf=document.createElement('div');
         conf.className='confetti';
-        conf.style.left = Math.random()*window.innerWidth+'px';
-        conf.style.background = colors[Math.floor(Math.random()*colors.length)];
+        conf.style.left=Math.random()*window.innerWidth+'px';
+        conf.style.background=colors[Math.floor(Math.random()*colors.length)];
         document.body.appendChild(conf);
         setTimeout(()=>conf.remove(),3000);
     }
 }
 
 function showJackpot(){
-    let jackpotDiv = document.getElementById('jackpot');
+    let jackpotDiv=document.getElementById('jackpot');
     jackpotDiv.style.display='block';
     document.getElementById('jackpotSound').play();
-    confettiFall(100);
+    confettiFall(150);
+    coinsFall(80);
     setTimeout(()=>jackpotDiv.style.display='none',2000);
 }
 
-function play(){
-    let bet=parseInt(document.getElementById('betSelect').value);
-    let win=Math.random()<0.5;
-    let resultDiv=document.getElementById('result');
+function blinkWinLine(reel){
+    let line = document.createElement('div');
+    line.className='winLine';
+    reel.appendChild(line);
+    setTimeout(()=>line.remove(),1000);
+}
 
-    if(win){
-        balance+=bet;
-        streak++;
-        let img = winImages[Math.floor(Math.random()*winImages.length)];
-        resultDiv.innerHTML=`Bạn thắng! +${bet}<br><img src="${img}" class="win" alt="Win">`;
-        document.getElementById('winSound').play();
-        jarExplosionEffect();
-        coinsFall(20+streak*5);
-
-        if(streak>=3) showJackpot();
-
-    } else {
-        balance-=bet;
-        streak=0;
-        let img = loseImages[Math.floor(Math.random()*loseImages.length)];
-        resultDiv.innerHTML=`Bạn thua! -${bet}<br><img src="${img}" class="lose" alt="Lose">`;
-        document.getElementById('loseSound').play();
+function addLights(){
+    const slot = document.getElementById('slotMachine');
+    for(let i=0;i<30;i++){
+        let light = document.createElement('div');
+        light.className='light';
+        light.style.top=Math.random()*slot.offsetHeight+'px';
+        light.style.left=Math.random()*slot.offsetWidth+'px';
+        slot.appendChild(light);
     }
+}
+addLights();
 
+function spin(){
+    document.getElementById('spinSound').play();
+    const reels = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
+    const finalSymbols = [];
+
+    reels.forEach((reel, i)=>{
+        reel.innerHTML='';
+        reel.classList.add('flash');
+        let pos = 0;
+        let speed = 50;
+        const interval = setInterval(()=>{
+            let randImg = symbols[Math.floor(Math.random()*symbols.length)];
+            reel.innerHTML = `<img src="${randImg}" class="symbol">`;
+            pos++;
+            speed += 10;
+            if(pos>15+i*5){
+                clearInterval(interval);
+                reel.classList.remove('flash');
+                finalSymbols[i]=reel.querySelector('img').src;
+                if(finalSymbols.length===3 && !finalSymbols.includes(undefined)){
+                    checkResult(finalSymbols);
+                }
+            }
+        },speed);
+    });
+}
+
+function checkResult(finalSymbols){
+    const winSound = document.getElementById('winSound');
+    if(finalSymbols[0]===finalSymbols[1] && finalSymbols[1]===finalSymbols[2]){
+        balance+=50;
+        streak++;
+        coinsFall(20+streak*5);
+        winSound.play();
+        document.querySelectorAll('.reel').forEach(r=>blinkWinLine(r));
+        if(streak>=3) showJackpot();
+    } else {
+        balance-=10;
+        streak=0;
+    }
     if(balance>highscore) highscore=balance;
-    document.getElementById('balance').innerText=`Tiền của bạn: ${balance}`;
+    document.getElementById('balance').innerText=`Tiền: ${balance}`;
     document.getElementById('highscore').innerText=`Tiền cao nhất: ${highscore}`;
 }
 </script>
